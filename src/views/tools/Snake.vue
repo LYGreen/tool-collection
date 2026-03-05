@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -7,7 +7,6 @@ const route = useRoute();
 const meta = route.meta as { title: string; icon: string; desc: string };
 
 // 游戏配置
-const GRID_SIZE = 20;
 const INITIAL_SPEED = 150;
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
@@ -54,7 +53,7 @@ const pauseGame = () => {
 
 const moveSnake = () => {
   direction = nextDirection;
-  const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+  const head = { x: (snake as any)[0].x + direction.x, y: (snake as any)[0].y + direction.y };
 
   // 撞墙或撞自己
   if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || 
@@ -127,8 +126,8 @@ const handleKeydown = (e: KeyboardEvent) => {
   if (keys[e.key]) {
     const move = keys[e.key];
     // 禁止直接回头
-    if (move.x !== -direction.x && move.y !== -direction.y) {
-      nextDirection = move;
+    if (move?.x !== -direction.x && move?.y !== -direction.y) {
+      nextDirection = move as { x: number, y: number };
     }
     e.preventDefault();
   }

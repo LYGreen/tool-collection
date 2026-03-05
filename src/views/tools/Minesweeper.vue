@@ -54,8 +54,8 @@ const placeMines = (excludeR: number, excludeC: number) => {
   while (minesPlaced < mines) {
     const r = Math.floor(Math.random() * rows);
     const c = Math.floor(Math.random() * cols);
-    if (!board.value[r][c].isMine && (r !== excludeR || c !== excludeC)) {
-      board.value[r][c].isMine = true;
+    if (!(board as any).value[r][c].isMine && (r !== excludeR || c !== excludeC)) {
+      (board as any).value[r][c].isMine = true;
       minesPlaced++;
     }
   }
@@ -63,21 +63,21 @@ const placeMines = (excludeR: number, excludeC: number) => {
   // 计算邻近雷数
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      if (board.value[r][c].isMine) continue;
+      if ((board as any).value[r][c].isMine) continue;
       let count = 0;
       for (let dr = -1; dr <= 1; dr++) {
         for (let dc = -1; dc <= 1; dc++) {
-          if (board.value[r + dr]?.[c + dc]?.isMine) count++;
+          if ((board as any).value[r + dr]?.[c + dc]?.isMine) count++;
         }
       }
-      board.value[r][c].neighborCount = count;
+      (board as any).value[r][c].neighborCount = count;
     }
   }
 };
 
 // 点击单元格
 const handleCellClick = (r: number, c: number) => {
-  if (gameState.value === 'lost' || gameState.value === 'won' || board.value[r][c].isFlagged) return;
+  if (gameState.value === 'lost' || gameState.value === 'won' || (board as any).value[r][c].isFlagged) return;
 
   if (gameState.value === 'idle') {
     placeMines(r, c);
@@ -114,7 +114,7 @@ const revealCell = (r: number, c: number) => {
 const handleRightClick = (e: MouseEvent, r: number, c: number) => {
   e.preventDefault();
   if (gameState.value !== 'playing' && gameState.value !== 'idle') return;
-  const cell = board.value[r][c];
+  const cell = (board as any).value[r][c];
   if (cell.isRevealed) return;
 
   cell.isFlagged = !cell.isFlagged;
@@ -122,11 +122,11 @@ const handleRightClick = (e: MouseEvent, r: number, c: number) => {
 };
 
 const checkGameState = () => {
-  const { rows, cols, mines } = LEVELS[currentLevel.value as keyof typeof LEVELS];
+  const { rows, cols } = LEVELS[currentLevel.value as keyof typeof LEVELS];
   let unrevealedSafeCells = 0;
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      if (!board.value[r][c].isMine && !board.value[r][c].isRevealed) unrevealedSafeCells++;
+      if (!(board as any).value[r][c].isMine && !(board as any).value[r][c].isRevealed) unrevealedSafeCells++;
     }
   }
   if (unrevealedSafeCells === 0) gameOver(true);

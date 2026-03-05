@@ -58,7 +58,7 @@ const generatePDF = async () => {
     for (let i = 0; i < images.value.length; i++) {
       if (i > 0) pdf.addPage();
       
-      const imgData = images.value[i];
+      const imgData = images.value[i] as ImageItem;
       
       // --- 核心算法：保持比例计算 ---
       const imgRatio = imgData.width / imgData.height;
@@ -124,7 +124,7 @@ const removeImage = (id: string) => {
       <div class="flex-1 flex flex-col gap-4">
         <div 
           @dragover.prevent @drop.prevent="e => addFiles(Array.from(e.dataTransfer?.files || []))"
-          @click="$refs.fileInput.click()"
+          @click="($refs.fileInput as any).click()"
           class="h-40 border-2 border-dashed border-slate-200 bg-white rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all cursor-pointer group"
         >
           <input type="file" ref="fileInput" multiple accept="image/*" class="hidden" @change="handleUpload" />

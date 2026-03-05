@@ -21,10 +21,10 @@ const generateUUIDs = () => {
     let uuid = crypto.randomUUID();
     
     if (removeHyphens.value) {
-      uuid = uuid.replace(/-/g, '');
+      uuid = uuid.replace(/-/g, '') as any;
     }
     if (useUppercase.value) {
-      uuid = uuid.toUpperCase();
+      uuid = uuid.toUpperCase() as any;
     }
     newUuids.push(uuid);
   }
@@ -36,6 +36,10 @@ const handleCopyAll = () => {
   navigator.clipboard.writeText(uuids.value.join('\n'));
   copied.value = true;
   setTimeout(() => (copied.value = false), 2000);
+};
+
+const handleCopy = (uuid: string) => {
+  navigator.clipboard.writeText(uuid);
 };
 
 // 初始生成
@@ -135,7 +139,7 @@ onMounted(() => {
                   <span class="font-mono text-sm text-slate-700 tracking-tight">{{ uuid }}</span>
                 </div>
                 <button 
-                  @click="() => { navigator.clipboard.writeText(uuid) }"
+                  @click="handleCopy(uuid)"
                   class="opacity-0 group-hover:opacity-100 px-2 py-1 text-[10px] font-bold text-indigo-600 hover:bg-indigo-100 rounded transition-all"
                 >
                   复制

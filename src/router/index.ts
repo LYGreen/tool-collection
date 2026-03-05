@@ -32,6 +32,16 @@ const router = createRouter({
         meta: { title: '图片转 PDF', icon: '📄', desc: '将多张图片合并并转换为 PDF 文档' }
     },
     {
+        path: '/tools/api-tester',
+        name: 'api-tester',
+        component: () => import('../views/tools/ApiTester.vue'),
+        meta: { 
+            title: '接口测试', 
+            icon: '🚀', 
+            desc: '轻量级 HTTP 客户端，支持常用请求方法' 
+        }
+    },
+    {
         path: '/tools/snake',
         name: 'snake',
         component: () => import('../views/tools/Snake.vue'),
